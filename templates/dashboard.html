@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Monitoring Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+        }
+        .box {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .box h2 {
+            color: #34495e;
+        }
+        .icon {
+            font-size: 40px;
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        .clickable {
+            cursor: pointer;
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        .dropdown {
+            margin-top: 10px;
+        }
+        .more-info {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #2980b9;
+            cursor: pointer;
+        }
+        .more-info:hover {
+            color: #1a5276;
+        }
+        .hidden-details {
+            display: none;
+            text-align: left;
+        }
+        .box.open .hidden-details {
+            display: block;
+            margin-top: 15px;
+        }
+    </style>
+    <script>
+        function toggleDetails(boxId) {
+            var box = document.getElementById(boxId);
+            if (box.classList.contains("open")) {
+                box.classList.remove("open");
+            } else {
+                box.classList.add("open");
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h1>Baby Monitoring Dashboard</h1>
+
+    <div class="container">
+        <!-- Baby Health Overview (Weight, Jaundice, Issues) -->
+        <div class="box" id="box1">
+            <i class="icon">⚕️</i>
+            <h2>Baby Health Overview</h2>
+            <p>Weight: {{ health_data['baby_weight'] }}</p>
+            <p>Jaundice: {{ health_data['jaundice_level'] }}</p>
+            <p>Issues: {{ health_data['issues'] }}</p>
+            <span class="more-info" onclick="toggleDetails('box1')">ℹ️ More Info</span>
+            <div class="hidden-details">
+                <h3>Detailed Health Information</h3>
+                <p>Here you can display additional baby health-related data.</p>
+            </div>
+        </div>
+
+        <!-- Baby Feeding History Overview -->
+        <div class="box" id="box2">
+            <i class="icon">🍽️</i>
+            <h2>Feeding History</h2>
+            <p>Today's Feeding Count: {{ feeding_data[0]['feed_count'] }}</p>
+            <span class="more-info" onclick="toggleDetails('box2')">ℹ️ More Info</span>
+            <div class="hidden-details">
+                <h3>Feeding History</h3>
+                <p>View complete feeding history.</p>
+                <label for="chart_type">Choose Chart Type:</label>
+                <select id="chart_type" class="dropdown" onchange="window.location.href='/feeding-history?chart_type='+this.value;">
+                    <option value="line">Line Chart</option>
+                    <option value="pie">Pie Chart</option>
+                    <option value="histogram">Histogram</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Pee and Poop Count Charts -->
+        <div class="box" id="box3">
+            <i class="icon">🚼</i>
+            <h2>Pee & Poop Count</h2>
+            <p>Pee: {{ pee_count }}</p>
+            <p>Poop: {{ poop_count }}</p>
+            <span class="more-info" onclick="toggleDetails('box3')">ℹ️ More Info</span>
+            <div class="hidden-details">
+                <h3>Pee and Poop Chart</h3>
+                <label for="pee_pooh_chart">View Chart:</label>
+                <select id="pee_pooh_chart" class="dropdown">
+                    <option value="line">Line Chart</option>
+                    <option value="pie">Pie Chart</option>
+                    <option value="histogram">Histogram</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Additional Box for Charts/Diagrams -->
+        <div class="box" id="box4">
+            <i class="icon">📊</i>
+            <h2>Health Data Charts</h2>
+            <div>
+                {{ health_chart|safe }}
+            </div>
+            <span class="more-info" onclick="toggleDetails('box4')">ℹ️ More Info</span>
+            <div class="hidden-details">
+                <h3>Health Data Diagrams</h3>
+                <p>Explore various health data-related charts and diagrams here.</p>
+            </div>
+        </div>
+
+        <!-- Additional Box Placeholder 1 -->
+        <div class="box" id="box5">
+            <i class="icon">🍼</i>
+            <h2>Additional Data 1</h2>
+            <p>Placeholder for more baby monitoring data.</p>
+            <span class="more-info" onclick="toggleDetails('box5')">ℹ️ More Info</span>
+            <div class="hidden-details">
+                <h3>Additional Info</h3>
+                <p>More details about this section.</p>
+            </div>
+        </div>
+
+        <!-- Additional Box Placeholder 2 -->
+        <div class="box" id="box6">
+            <i class="icon">👶</i>
+            <h2>Additional Data 2</h2>
+            <p>Placeholder for more baby monitoring data.</p>
+            <span class="more-info" onclick="toggleDetails('box6')">ℹ️ More Info</span>
+            <div class="hidden-details">
+                <h3>Additional Info</h3>
+                <p>More details about this section.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
