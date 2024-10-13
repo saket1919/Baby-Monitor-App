@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Sample data for baby health, feeding history, and pee/poop counts
 sample_health_data = {
     'date': '2024-10-12',
-    'baby_weight': '3.5 kg',
+    'baby_weight': '3.6 kg',
     'jaundice_level': '14.9',
     'issues': 'None'
 }

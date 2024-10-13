@@ -4,56 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feeding History</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-        }
-        h1, h2 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        ul li {
-            background-color: #ecf0f1;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 4px;
-        }
-        .chart-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-    </style>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+    <div class="container my-4">
+        <h2>Feeding History</h2>
+        <!-- Dropdown for chart type -->
+        <form method="get" action="/feeding-history">
+            <label for="chartType">Select Chart Type:</label>
+            <select name="chart_type" id="chartType" class="form-control mb-3">
+                <option value="line">Line Chart</option>
+                <option value="pie">Pie Chart</option>
+                <option value="histogram">Histogram</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Generate Chart</button>
+        </form>
 
-    <div class="container">
-        <h1>Feeding History Details</h1>
-        
+        <!-- Display table data -->
+        <h4>Feeding Details</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Feed Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in table_data %}
+                <tr>
+                    <td>{{ entry['date'] }}</td>
+                    <td>{{ entry['feed_count'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Display chart -->
         <div class="chart-container">
-            {{ graph|safe }}
+            {{ graph | safe }}
         </div>
-        
-        <h2>Table Data</h2>
-        <ul>
-            {% for entry in table_data %}
-                <li><strong>Date:</strong> {{ entry['date'] }} - <strong>Feed Count:</strong> {{ entry['feed_count'] }}</li>
-            {% endfor %}
-        </ul>
     </div>
-
+</body>
+</html>
